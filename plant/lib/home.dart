@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:plant/search_image.dart';
+import 'detail.dart'; // detail.dart 파일을 임포트합니다
+import 'search_image.dart'; // 검색 이미지 페이지를 임포트합니다
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -67,8 +68,26 @@ class PlantList extends StatelessWidget {
           itemBuilder: (context, index) {
             final plant = plants[index];
             return ListTile(
-              title: Text(plant['name']),
-              subtitle: Text(plant['nickname']),
+              leading: Image.asset('images/seed.png'), 
+              title: Text(plant['nickname']),
+              subtitle: Text(plant['name']),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailPage(
+                      name: plant['name'],
+                      nickname: plant['nickname'],
+                      date: plant['date'],
+                      lux: plant['lux'],
+                      temp: plant['temp'],
+                      humidity: plant['humidity'],
+                      info: plant['info'],
+                      water: plant['water'],
+                    ),
+                  ),
+                );
+              },
             );
           },
         );
