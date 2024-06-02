@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DetailPage extends StatefulWidget {
   final String name;
@@ -89,18 +90,23 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
               ),
             ),
             SizedBox(height: 16),
-            Text(
-              '${widget.nickname}',
-              style: TextStyle(fontSize: 24),
+            Shimmer.fromColors(
+              baseColor: Color.fromARGB(255, 70, 69, 69)!,
+              highlightColor: Color.fromARGB(255, 140, 188, 96)!,
+              child: Text(
+                '${widget.nickname}',
+                style: TextStyle(fontSize: 24),
+              ),
             ),
             SizedBox(height: 8),
             Text(
               '${widget.name}',
-              
-              style: TextStyle(fontSize: 18, color: const Color.fromARGB(255, 135, 197, 65)),
+              style: TextStyle(
+                fontSize: 18,
+                color: const Color.fromARGB(255, 135, 197, 65),
+              ),
             ),
             SizedBox(height: 16),
-        
             TabBar(
               controller: _tabController,
               tabs: [
@@ -131,7 +137,7 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.wb_sunny_outlined, color: Colors.orange,), // Lux 아이콘
+                            Icon(Icons.wb_sunny_outlined, color: Colors.orange), // Lux 아이콘
                             SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -145,7 +151,7 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                         SizedBox(height: 16),
                         Row(
                           children: [
-                            Icon(Icons.thermostat_outlined, color: Colors.lightGreen,), // Temperature 아이콘
+                            Icon(Icons.thermostat_outlined, color: Colors.lightGreen), // Temperature 아이콘
                             SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -159,7 +165,7 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                         SizedBox(height: 16),
                         Row(
                           children: [
-                            Icon(Icons.opacity_outlined, color: const Color.fromARGB(255, 127, 203, 238),), // Humidity 아이콘
+                            Icon(Icons.opacity_outlined, color: const Color.fromARGB(255, 127, 203, 238)), // Humidity 아이콘
                             SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -173,7 +179,7 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                         SizedBox(height: 16),
                         Row(
                           children: [
-                            Icon(Icons.format_color_fill, color: Colors.lightBlue,), // Water 아이콘
+                            Icon(Icons.format_color_fill, color: Colors.lightBlue), // Water 아이콘
                             SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -186,12 +192,12 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                         ),
                         SizedBox(height: 20),
                         Expanded(
-                              child: Text(
-                                '${widget.info}',
-                                style: TextStyle(fontSize: 18),
-                                overflow: TextOverflow.clip,
-                              ),
-                            ),
+                          child: Text(
+                            '${widget.info}',
+                            style: TextStyle(fontSize: 18),
+                            overflow: TextOverflow.clip,
+                          ),
+                        ),
                       ],
                     ),
                   ),
