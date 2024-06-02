@@ -63,5 +63,10 @@
 	<string>This app required NSCameraUsageDescription permission</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app required NSMicrophoneUsageDescription permission</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+<string>This app needs access to location when open.</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>This app needs access to location when in the background.</string>
+
 </dict>
 </plist>
