@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'detail.dart'; // detail.dart 파일을 임포트합니다
 import 'search_image.dart'; // 검색 이미지 페이지를 임포트합니다
+import 'add_list_page.dart'; // add_list_page.dart 파일을 임포트합니다
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -25,7 +26,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('List'),
         actions: [
           IconButton(
             icon: const Icon(Icons.image_search),
@@ -42,6 +43,15 @@ class _HomeState extends State<Home> {
       body: user == null
           ? const Center(child: Text('로그인이 필요합니다'))
           : PlantList(userid: user!.uid),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddListPage()),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
