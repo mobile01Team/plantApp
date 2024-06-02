@@ -17,8 +17,8 @@ class AddPage extends StatefulWidget {
     required this.humidity,
     required this.info,
     required this.water,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _AddPageState createState() => _AddPageState();
@@ -64,7 +64,7 @@ class _AddPageState extends State<AddPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                '${widget.name}',
+                widget.name,
                 style: const TextStyle(fontSize: 24),
               ),
               const SizedBox(height: 16),
@@ -73,7 +73,7 @@ class _AddPageState extends State<AddPage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 6,
@@ -86,8 +86,8 @@ class _AddPageState extends State<AddPage> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.wb_sunny_outlined, color: Colors.orange), 
-                        SizedBox(width: 8),
+                        const Icon(Icons.wb_sunny_outlined, color: Colors.orange), 
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             widget.lux,
@@ -100,8 +100,8 @@ class _AddPageState extends State<AddPage> {
                     const SizedBox(height: 16),
                     Row(
                       children: [
-                        Icon(Icons.thermostat_outlined, color: Colors.lightGreen,), 
-                        SizedBox(width: 8),
+                        const Icon(Icons.thermostat_outlined, color: Colors.lightGreen,), 
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             widget.temp,
@@ -114,8 +114,8 @@ class _AddPageState extends State<AddPage> {
                     const SizedBox(height: 16),
                     Row(
                       children: [
-                        Icon(Icons.opacity_outlined, color: const Color.fromARGB(255, 127, 203, 238),), 
-                        SizedBox(width: 8),
+                        const Icon(Icons.opacity_outlined, color: Color.fromARGB(255, 127, 203, 238),), 
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             widget.humidity,
@@ -128,8 +128,8 @@ class _AddPageState extends State<AddPage> {
                     const SizedBox(height: 16),
                     Row(
                       children: [
-                        Icon(Icons.format_color_fill, color: Colors.lightBlue,), 
-                        SizedBox(width: 8),
+                        const Icon(Icons.format_color_fill, color: Colors.lightBlue,), 
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             widget.water,

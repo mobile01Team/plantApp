@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add.dart';
 
 class SearchImage extends StatefulWidget {
-  const SearchImage({Key? key}) : super(key: key);
+  const SearchImage({super.key});
 
   @override
   State<SearchImage> createState() => _SearchImageState();
@@ -67,7 +67,6 @@ class _SearchImageState extends State<SearchImage> {
    
   }
 }
-
 
   @override
   Widget build(BuildContext context) {

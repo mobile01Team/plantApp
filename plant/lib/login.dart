@@ -32,11 +32,11 @@ class _LoginPageState extends State<LoginPage> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
                       elevation: 2,
                       color: Colors.red[300],
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             SizedBox(width: 5),
                             Text(
                               "Sign In With Google",
@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
       if (userCredential.user != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Home()), // Home 페이지로 이동
+          MaterialPageRoute(builder: (context) => const Home()), // Home 페이지로 이동
         );
       }
     } catch (e) {

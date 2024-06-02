@@ -27,8 +27,8 @@ class DetailPage extends StatefulWidget {
     required this.info,
     required this.temp,
     required this.water,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _DetailPageState createState() => _DetailPageState();
@@ -71,7 +71,7 @@ class _DetailPageState extends State<DetailPage>
   }
 
   Future<Map<String, dynamic>> fetchWeather(double lat, double lon) async {
-    final apiKey = '3621bc74ad5b93efe4651dd92bb5378c'; // OpenWeatherMap API 키
+    const apiKey = '3621bc74ad5b93efe4651dd92bb5378c'; // OpenWeatherMap API 키
     final url =
         'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&units=metric&appid=$apiKey';
 
@@ -111,11 +111,11 @@ class _DetailPageState extends State<DetailPage>
         title: Text(widget.name),
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Search()),
+                MaterialPageRoute(builder: (context) => const Search()),
               );
             },
           ),
@@ -132,7 +132,7 @@ class _DetailPageState extends State<DetailPage>
                 height: 310,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Color.fromARGB(66, 226, 247, 213),
                       blurRadius: 10,
@@ -146,27 +146,27 @@ class _DetailPageState extends State<DetailPage>
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Shimmer.fromColors(
-              baseColor: Color.fromARGB(255, 70, 69, 69),
-              highlightColor: Color.fromARGB(255, 140, 188, 96),
+              baseColor: const Color.fromARGB(255, 70, 69, 69),
+              highlightColor: const Color.fromARGB(255, 140, 188, 96),
               child: Text(
-                '${widget.nickname}',
-                style: TextStyle(fontSize: 24),
+                widget.nickname,
+                style: const TextStyle(fontSize: 24),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
-              '${widget.name}',
-              style: TextStyle(
+              widget.name,
+              style: const TextStyle(
                 fontSize: 18,
-                color: const Color.fromARGB(255, 135, 197, 65),
+                color: Color.fromARGB(255, 135, 197, 65),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TabBar(
               controller: _tabController,
-              tabs: [
+              tabs: const [
                 Tab(text: '현재 상태'),
                 Tab(text: '키우는 법'),
               ],
@@ -180,46 +180,46 @@ class _DetailPageState extends State<DetailPage>
                     padding: const EdgeInsets.all(16.0),
                     child: Center(
                       child: _isFetchingWeather
-                          ? CircularProgressIndicator()
+                          ? const CircularProgressIndicator()
                           : _weatherData != null
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       '온도: ${_weatherData!['main']['temp']}°C',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                     Text(
                                       '최저 온도: ${_weatherData!['main']['temp_min']}°C',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                     Text(
                                       '최고 온도: ${_weatherData!['main']['temp_max']}°C',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                     Text(
                                       '습도: ${_weatherData!['main']['humidity']}%',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                     Text(
                                       '풍속: ${_weatherData!['wind']['speed']} m/s',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                     Text(
                                       '풍향: ${_weatherData!['wind']['deg']}°',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                     Text(
                                       '돌풍: ${_weatherData!['wind']['gust']} m/s',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                     Text(
                                       '구름량: ${_weatherData!['clouds']['all']}%',
-                                      style: TextStyle(fontSize: 16),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                   ],
                                 )
-                              : Text(
+                              : const Text(
                                   '날씨 정보를 불러올 수 없습니다.',
                                   style: TextStyle(fontSize: 18),
                                 ),
@@ -233,68 +233,68 @@ class _DetailPageState extends State<DetailPage>
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.wb_sunny_outlined, color: Colors.orange),
-                            SizedBox(width: 8),
+                            const Icon(Icons.wb_sunny_outlined, color: Colors.orange),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                '${widget.lux}',
-                                style: TextStyle(fontSize: 18),
+                                widget.lux,
+                                style: const TextStyle(fontSize: 18),
                                 overflow: TextOverflow.clip,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Row(
                           children: [
-                            Icon(Icons.thermostat_outlined,
+                            const Icon(Icons.thermostat_outlined,
                                 color: Colors.lightGreen),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                '${widget.temp}',
-                                style: TextStyle(fontSize: 18),
+                                widget.temp,
+                                style: const TextStyle(fontSize: 18),
                                 overflow: TextOverflow.clip,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Row(
                           children: [
-                            Icon(Icons.opacity_outlined,
+                            const Icon(Icons.opacity_outlined,
                                 color:
-                                    const Color.fromARGB(255, 127, 203, 238)),
-                            SizedBox(width: 8),
+                                    Color.fromARGB(255, 127, 203, 238)),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                '${widget.humidity}',
-                                style: TextStyle(fontSize: 18),
+                                widget.humidity,
+                                style: const TextStyle(fontSize: 18),
                                 overflow: TextOverflow.clip,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Row(
                           children: [
-                            Icon(Icons.format_color_fill,
+                            const Icon(Icons.format_color_fill,
                                 color: Colors.lightBlue),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                '${widget.water}',
-                                style: TextStyle(fontSize: 18),
+                                widget.water,
+                                style: const TextStyle(fontSize: 18),
                                 overflow: TextOverflow.clip,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Expanded(
                           child: Text(
-                            '${widget.info}',
-                            style: TextStyle(fontSize: 18),
+                            widget.info,
+                            style: const TextStyle(fontSize: 18),
                             overflow: TextOverflow.clip,
                           ),
                         ),

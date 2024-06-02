@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
 
 class PlantList extends StatelessWidget {
   final String userid;
-  const PlantList({required this.userid});
+  const PlantList({super.key, required this.userid});
 
   @override
   Widget build(BuildContext context) {

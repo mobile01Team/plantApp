@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class Search extends StatefulWidget {
-  const Search({Key? key}) : super(key: key);
+  const Search({super.key});
 
   @override
   _SearchState createState() => _SearchState();
