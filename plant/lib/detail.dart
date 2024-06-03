@@ -1,12 +1,13 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:plant/main.dart';
 import 'package:plant/search.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class DetailPage extends StatefulWidget {
   final String name;
@@ -45,6 +46,7 @@ class _DetailPageState extends State<DetailPage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _fetchLocationAndWeather();
+    _checkWateringStatus();
   }
 
   Future<void> _fetchLocationAndWeather() async {
@@ -82,6 +84,40 @@ class _DetailPageState extends State<DetailPage>
     } else {
       throw Exception('Failed to load weather');
     }
+  }
+
+  Future<void> _showNotification(String title, String body) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'water_channel',
+      'Water Notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      body,
+      platformChannelSpecifics,
+      payload: 'watered',
+    );
+  }
+
+  void _checkWateringStatus() {
+    final currentDate = DateTime.now();
+    final difference = currentDate.difference(widget.date.toDate()).inDays;
+
+    if (difference % 5 == 0) {
+      _showNotification('물주기 알림', '식물에게 물을 줄 시간입니다.');
+    }
+  }
+
+  double _getWateringProgress() {
+    final currentDate = DateTime.now();
+    final difference = currentDate.difference(widget.date.toDate()).inDays;
+    return (difference % 5) / 5;
   }
 
   @override
@@ -145,6 +181,13 @@ class _DetailPageState extends State<DetailPage>
                   child: Lottie.asset(lottieFile),
                 ),
               ),
+            ),
+            const SizedBox(height: 16),
+            LinearProgressIndicator(
+              value: _getWateringProgress(),
+              backgroundColor: Colors.grey[300],
+              color: Colors.blue,
+              minHeight: 10,
             ),
             const SizedBox(height: 16),
             Shimmer.fromColors(
@@ -263,8 +306,7 @@ class _DetailPageState extends State<DetailPage>
                         Row(
                           children: [
                             const Icon(Icons.opacity_outlined,
-                                color:
-                                    Color.fromARGB(255, 127, 203, 238)),
+                                color: Color.fromARGB(255, 127, 203, 238)),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(

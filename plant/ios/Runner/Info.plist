@@ -64,9 +64,17 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app required NSMicrophoneUsageDescription permission</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-<string>This app needs access to location when open.</string>
-<key>NSLocationAlwaysUsageDescription</key>
-<string>This app needs access to location when in the background.</string>
-
+	<string>This app needs access to location when open.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to location when in the background.</string>
+	<!-- 추가된 부분 -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app requires access to local notifications.</string>
+	<!-- 여기까지 -->
 </dict>
 </plist>
