@@ -1,12 +1,14 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:plant/main.dart';
 import 'package:plant/search.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class DetailPage extends StatefulWidget {
   final String name;
@@ -45,6 +47,7 @@ class _DetailPageState extends State<DetailPage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _fetchLocationAndWeather();
+    _checkWateringStatus();
   }
 
   Future<void> _fetchLocationAndWeather() async {
@@ -82,6 +85,40 @@ class _DetailPageState extends State<DetailPage>
     } else {
       throw Exception('Failed to load weather');
     }
+  }
+
+  Future<void> _showNotification(String title, String body) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'water_channel',
+      'Water Notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      body,
+      platformChannelSpecifics,
+      payload: 'watered',
+    );
+  }
+
+  void _checkWateringStatus() {
+    final currentDate = DateTime.now();
+    final difference = currentDate.difference(widget.date.toDate()).inDays;
+
+    if (difference % 5 == 0) {
+      _showNotification('물주기 알림', '식물에게 물을 줄 시간입니다.');
+    }
+  }
+
+  double _getWateringProgress() {
+    final currentDate = DateTime.now();
+    final difference = currentDate.difference(widget.date.toDate()).inDays;
+    return (difference % 5) / 5;
   }
 
   @override
@@ -147,6 +184,13 @@ class _DetailPageState extends State<DetailPage>
               ),
             ),
             const SizedBox(height: 16),
+            LinearProgressIndicator(
+              value: _getWateringProgress(),
+              backgroundColor: Colors.grey[300],
+              color: Colors.blue,
+              minHeight: 10,
+            ),
+            const SizedBox(height: 16),
             Shimmer.fromColors(
               baseColor: const Color.fromARGB(255, 70, 69, 69),
               highlightColor: const Color.fromARGB(255, 140, 188, 96),
@@ -167,7 +211,7 @@ class _DetailPageState extends State<DetailPage>
             TabBar(
               controller: _tabController,
               tabs: const [
-                Tab(text: '현재 상태'),
+                Tab(text: '현재 날씨 상태'),
                 Tab(text: '키우는 법'),
               ],
             ),
@@ -176,129 +220,187 @@ class _DetailPageState extends State<DetailPage>
                 controller: _tabController,
                 children: [
                   // 현재 상태 탭 내용
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(
-                      child: _isFetchingWeather
-                          ? const CircularProgressIndicator()
-                          : _weatherData != null
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '온도: ${_weatherData!['main']['temp']}°C',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      '최저 온도: ${_weatherData!['main']['temp_min']}°C',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      '최고 온도: ${_weatherData!['main']['temp_max']}°C',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      '습도: ${_weatherData!['main']['humidity']}%',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      '풍속: ${_weatherData!['wind']['speed']} m/s',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      '풍향: ${_weatherData!['wind']['deg']}°',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      '돌풍: ${_weatherData!['wind']['gust']} m/s',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    Text(
-                                      '구름량: ${_weatherData!['clouds']['all']}%',
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                )
-                              : const Text(
-                                  '날씨 정보를 불러올 수 없습니다.',
-                                  style: TextStyle(fontSize: 18),
-                                ),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Center(
+                        child: _isFetchingWeather
+                            ? const CircularProgressIndicator()
+                            : _weatherData != null
+                                ? Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.thermostat_outlined, color: Colors.lightGreen,), 
+                                          const Text(
+                                            '온도: ',
+                                            style: TextStyle(fontSize: 16),
+                                            
+                                          ),
+                                          SizedBox(width: 60,height: 60,),
+                                          SizedBox(
+                                            width: 150,
+                                            height: 150,
+                                            child: PieChart(
+                                              PieChartData(
+                                                sections: [
+                                                  PieChartSectionData(
+                                                    value: (_weatherData!['main']['temp'] as num).toDouble(),
+                                                    title: '${_weatherData!['main']['temp']}°C',
+                                                    titleStyle: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                    color: Colors.lightBlue,
+                                                    radius: 70,
+                                                  ),
+                                                  PieChartSectionData(
+                                                    value: (40 - (_weatherData!['main']['temp'] as num)).toDouble(),
+                                                    title: '',
+                                                    color: Color.fromRGBO(170, 220, 232, 1),
+                                                    radius: 70,
+                                                  ),
+                                                ],
+                                                centerSpaceRadius: 0,
+                                                sectionsSpace: 0,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.opacity_outlined, color: Color.fromARGB(255, 127, 203, 238),), 
+                                          const Text(
+                                            '습도: ',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          SizedBox(width: 60,height: 60,),
+                                          SizedBox(
+                                            width: 150,
+                                            height: 150,
+                                            child: PieChart(
+                                              PieChartData(
+                                                sections: [
+                                                  PieChartSectionData(
+                                                    value: (_weatherData!['main']['humidity'] as num).toDouble(),
+                                                    title: '${_weatherData!['main']['humidity']}%',
+                                                    titleStyle: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                    color: Colors.green,
+                                                    radius: 70,
+                                                  ),
+                                                  PieChartSectionData(
+                                                    value: (100 - (_weatherData!['main']['humidity'] as num)).toDouble(),
+                                                    title: '',
+                                                    color: Color.fromARGB(255, 187, 244, 209),
+                                                    radius: 70,
+                                                  ),
+                                                ],
+                                                centerSpaceRadius: 0,
+                                                sectionsSpace: 0,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        '최저 온도: ${_weatherData!['main']['temp_min']}°C',
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      Text(
+                                        '최고 온도: ${_weatherData!['main']['temp_max']}°C',
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      Text(
+                                        '풍속: ${_weatherData!['wind']['speed']} m/s',
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                    ],
+                                  )
+                                : const Text(
+                                    '날씨 정보를 불러올 수 없습니다.',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                      ),
                     ),
                   ),
                   // 키우는 법 탭 내용
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.wb_sunny_outlined, color: Colors.orange),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                widget.lux,
-                                style: const TextStyle(fontSize: 18),
-                                overflow: TextOverflow.clip,
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.wb_sunny_outlined, color: Colors.orange), 
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  widget.lux,
+                                  style: const TextStyle(fontSize: 18),
+                                  overflow: TextOverflow.clip,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            const Icon(Icons.thermostat_outlined,
-                                color: Colors.lightGreen),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                widget.temp,
-                                style: const TextStyle(fontSize: 18),
-                                overflow: TextOverflow.clip,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            const Icon(Icons.opacity_outlined,
-                                color:
-                                    Color.fromARGB(255, 127, 203, 238)),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                widget.humidity,
-                                style: const TextStyle(fontSize: 18),
-                                overflow: TextOverflow.clip,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            const Icon(Icons.format_color_fill,
-                                color: Colors.lightBlue),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                widget.water,
-                                style: const TextStyle(fontSize: 18),
-                                overflow: TextOverflow.clip,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: Text(
-                            widget.info,
-                            style: const TextStyle(fontSize: 18),
-                            overflow: TextOverflow.clip,
+                            ],
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              const Icon(Icons.thermostat_outlined, color: Colors.lightGreen,), 
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  widget.temp,
+                                  style: const TextStyle(fontSize: 18),
+                                  overflow: TextOverflow.clip,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              const Icon(Icons.opacity_outlined, color: Color.fromARGB(255, 127, 203, 238),), 
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  widget.humidity,
+                                  style: const TextStyle(fontSize: 18),
+                                  overflow: TextOverflow.clip,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              const Icon(Icons.format_color_fill, color: Colors.lightBlue,), 
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  widget.water,
+                                  style: const TextStyle(fontSize: 18),
+                                  overflow: TextOverflow.clip,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            '${widget.info}',
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
