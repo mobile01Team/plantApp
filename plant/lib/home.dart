@@ -129,12 +129,12 @@ class _HomeState extends State<Home> {
                 ? const Center(child: Text('로그인이 필요합니다'))
                 : PlantList(userid: user!.uid),
           ),
-          const SizedBox(height: 10),
-          Container(
-            height: 200,
-            child: Weather(),
-          ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
+        height: 100,
+        child: Weather(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -286,7 +286,7 @@ class _WeatherState extends State<Weather> {
 
     var currentItem = data[currentIndex];
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
