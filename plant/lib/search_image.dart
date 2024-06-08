@@ -60,6 +60,7 @@ class _SearchImageState extends State<SearchImage> {
           humidity: plant['humidity'],
           info: plant['info'],
           water: plant['water'],
+          special: plant['special'],
         ),
       ),
     );

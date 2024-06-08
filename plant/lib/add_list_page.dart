@@ -42,6 +42,7 @@ class AddListPage extends StatelessWidget {
                         humidity: plant['humidity'],
                         info: plant['info'],
                         water: plant['water'],
+                        special: plant['special'],
                       ),
                     ),
                   );

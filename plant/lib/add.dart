@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shimmer/shimmer.dart'; // shimmer 패키지 추가
 
 class AddPage extends StatefulWidget {
   final String name;
@@ -9,6 +10,7 @@ class AddPage extends StatefulWidget {
   final String humidity;
   final String info;
   final String water;
+  final String special;
 
   const AddPage({
     required this.name,
@@ -17,6 +19,7 @@ class AddPage extends StatefulWidget {
     required this.humidity,
     required this.info,
     required this.water,
+    required this.special,
     super.key,
   });
 
@@ -66,6 +69,33 @@ class _AddPageState extends State<AddPage> {
               Text(
                 widget.name,
                 style: const TextStyle(fontSize: 24),
+              ),
+              const SizedBox(height: 8), 
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.lightGreen, width: 2), 
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.lightBlue,
+                  highlightColor: Color.fromARGB(255, 169, 176, 159),
+                  child: Text(
+                    widget.special,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(height: 16),
               Container(
@@ -185,12 +215,13 @@ class _AddPageState extends State<AddPage> {
                         'nickname': _nicknameController.text,
                         'userid': user.uid,
                         'date': Timestamp.fromDate(_selectedDate!),
+                        'special': widget.special,
                       });
                       Navigator.pop(context);
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
+                    backgroundColor: Color.fromARGB(255, 156, 156, 214),
                     minimumSize: const Size(200, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -198,7 +229,7 @@ class _AddPageState extends State<AddPage> {
                   ),
                   child: const Text(
                     '식물 등록하기',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white,fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

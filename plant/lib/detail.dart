@@ -7,8 +7,8 @@ import 'package:lottie/lottie.dart';
 import 'package:plant/main.dart';
 import 'package:plant/search.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class DetailPage extends StatefulWidget {
   final String name;
@@ -19,6 +19,7 @@ class DetailPage extends StatefulWidget {
   final String temp;
   final String water;
   final String info;
+  final String special;
 
   const DetailPage({
     required this.name,
@@ -29,6 +30,7 @@ class DetailPage extends StatefulWidget {
     required this.info,
     required this.temp,
     required this.water,
+    required this.special,
     super.key,
   });
 
@@ -36,8 +38,7 @@ class DetailPage extends StatefulWidget {
   _DetailPageState createState() => _DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage>
-    with SingleTickerProviderStateMixin {
+class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   Map<String, dynamic>? _weatherData;
   bool _isFetchingWeather = false;
@@ -56,10 +57,8 @@ class _DetailPageState extends State<DetailPage>
     });
 
     try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      Map<String, dynamic> weatherData =
-          await fetchWeather(position.latitude, position.longitude);
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Map<String, dynamic> weatherData = await fetchWeather(position.latitude, position.longitude);
       setState(() {
         _weatherData = weatherData;
       });
@@ -75,8 +74,7 @@ class _DetailPageState extends State<DetailPage>
 
   Future<Map<String, dynamic>> fetchWeather(double lat, double lon) async {
     const apiKey = '3621bc74ad5b93efe4651dd92bb5378c'; // OpenWeatherMap API 키
-    final url =
-        'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&units=metric&appid=$apiKey';
+    final url = 'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&units=metric&appid=$apiKey';
 
     final response = await http.get(Uri.parse(url));
 
@@ -88,15 +86,13 @@ class _DetailPageState extends State<DetailPage>
   }
 
   Future<void> _showNotification(String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
+    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'water_channel',
       'Water Notifications',
       importance: Importance.max,
       priority: Priority.high,
     );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
       0,
       title,
@@ -191,21 +187,56 @@ class _DetailPageState extends State<DetailPage>
               minHeight: 10,
             ),
             const SizedBox(height: 16),
-            Shimmer.fromColors(
-              baseColor: const Color.fromARGB(255, 70, 69, 69),
-              highlightColor: const Color.fromARGB(255, 140, 188, 96),
-              child: Text(
-                widget.nickname,
-                style: const TextStyle(fontSize: 24),
-              ),
+            Row(
+              children: [
+                Shimmer.fromColors(
+                  baseColor: const Color.fromARGB(255, 70, 69, 69),
+                  highlightColor: const Color.fromARGB(255, 140, 188, 96),
+                  child: Text(
+                    widget.nickname,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
-            Text(
-              widget.name,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Color.fromARGB(255, 135, 197, 65),
-              ),
+            Row(
+              children: [
+                Text(
+                  widget.name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Color.fromARGB(255, 135, 197, 65),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.lightGreen, width: 2),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.lightBlue,
+                    highlightColor: const Color.fromARGB(255, 169, 176, 159),
+                    child: Text(
+                      widget.special,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             TabBar(
@@ -232,11 +263,10 @@ class _DetailPageState extends State<DetailPage>
                                     children: [
                                       Row(
                                         children: [
-                                          const Icon(Icons.thermostat_outlined, color: Colors.lightGreen,), 
+                                          const Icon(Icons.thermostat_outlined, color: Colors.orange), 
                                           const Text(
                                             '온도: ',
                                             style: TextStyle(fontSize: 16),
-                                            
                                           ),
                                           SizedBox(width: 60,height: 60,),
                                           SizedBox(
@@ -253,13 +283,13 @@ class _DetailPageState extends State<DetailPage>
                                                       fontWeight: FontWeight.bold,
                                                       color: Colors.white,
                                                     ),
-                                                    color: Colors.lightBlue,
+                                                    color: Color.fromRGBO(245, 162, 7, 1),
                                                     radius: 70,
                                                   ),
                                                   PieChartSectionData(
                                                     value: (40 - (_weatherData!['main']['temp'] as num)).toDouble(),
                                                     title: '',
-                                                    color: Color.fromRGBO(170, 220, 232, 1),
+                                                    color: Color.fromRGBO(240, 186, 85, 1),
                                                     radius: 70,
                                                   ),
                                                 ],
@@ -273,7 +303,7 @@ class _DetailPageState extends State<DetailPage>
                                       const SizedBox(height: 16),
                                       Row(
                                         children: [
-                                          const Icon(Icons.opacity_outlined, color: Color.fromARGB(255, 127, 203, 238),), 
+                                          const Icon(Icons.opacity_outlined, color: Colors.lightGreen), 
                                           const Text(
                                             '습도: ',
                                             style: TextStyle(fontSize: 16),
@@ -310,19 +340,47 @@ class _DetailPageState extends State<DetailPage>
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 16),
-                                      Text(
-                                        '최저 온도: ${_weatherData!['main']['temp_min']}°C',
-                                        style: const TextStyle(fontSize: 16),
+                                      const SizedBox(height: 16,),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.wind_power_outlined, color: Color.fromARGB(255, 127, 203, 238),), 
+                                          const Text(
+                                            '풍속: ',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          SizedBox(width: 60,height: 60,),
+                                          SizedBox(
+                                            width: 150,
+                                            height: 150,
+                                            child: PieChart(
+                                              PieChartData(
+                                                sections: [
+                                                  PieChartSectionData(
+                                                    value: (_weatherData!['wind']['speed'] as num).toDouble(),
+                                                    title: '${_weatherData!['wind']['speed']}%',
+                                                    titleStyle: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.white,
+                                                    ),
+                                                    color: Colors.lightBlue,
+                                                    radius: 70,
+                                                  ),
+                                                  PieChartSectionData(
+                                                    value: (54 - (_weatherData!['wind']['speed'] as num)).toDouble(),
+                                                    title: '',
+                                                    color: Color.fromARGB(255, 132, 210, 255),
+                                                    radius: 70,
+                                                  ),
+                                                ],
+                                                centerSpaceRadius: 0,
+                                                sectionsSpace: 0,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        '최고 온도: ${_weatherData!['main']['temp_max']}°C',
-                                        style: const TextStyle(fontSize: 16),
-                                      ),
-                                      Text(
-                                        '풍속: ${_weatherData!['wind']['speed']} m/s',
-                                        style: const TextStyle(fontSize: 16),
-                                      ),
+                                      
                                     ],
                                   )
                                 : const Text(
@@ -346,7 +404,7 @@ class _DetailPageState extends State<DetailPage>
                               Expanded(
                                 child: Text(
                                   widget.lux,
-                                  style: const TextStyle(fontSize: 18),
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
                                   overflow: TextOverflow.clip,
                                 ),
                               ),
@@ -360,7 +418,7 @@ class _DetailPageState extends State<DetailPage>
                               Expanded(
                                 child: Text(
                                   widget.temp,
-                                  style: const TextStyle(fontSize: 18),
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
                                   overflow: TextOverflow.clip,
                                 ),
                               ),
@@ -374,7 +432,7 @@ class _DetailPageState extends State<DetailPage>
                               Expanded(
                                 child: Text(
                                   widget.humidity,
-                                  style: const TextStyle(fontSize: 18),
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
                                   overflow: TextOverflow.clip,
                                 ),
                               ),
@@ -388,7 +446,7 @@ class _DetailPageState extends State<DetailPage>
                               Expanded(
                                 child: Text(
                                   widget.water,
-                                  style: const TextStyle(fontSize: 18),
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
                                   overflow: TextOverflow.clip,
                                 ),
                               ),
@@ -397,7 +455,7 @@ class _DetailPageState extends State<DetailPage>
                           const SizedBox(height: 16),
                           Text(
                             '${widget.info}',
-                            style: const TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
                           ),
                         ],
                       ),

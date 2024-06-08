@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'home.dart'; // Home 페이지 임포트
+import 'home.dart'; 
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,6 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -22,6 +23,18 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Image.asset(
+                    'images/Logo.png',
+                    width: 180, // 원하는 크기로 조정
+                    height: 180, // 원하는 크기로 조정
+                  ),
+                  const SizedBox(height: 20),
+                  Image.asset(
+                    'images/MyPlant.png',
+                    width: 200, // 원하는 크기로 조정
+                    height: 50, // 원하는 크기로 조정
+                  ),
+                  const SizedBox(height: 40),
                   InkWell(
                     onTap: () {
                       // 구글 로그인 함수 호출
@@ -33,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                       elevation: 2,
                       color: Colors.red[300],
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
