@@ -139,31 +139,47 @@ class PlantList extends StatelessWidget {
         final plants = snapshot.data!.docs;
 
         return ListView.builder(
+          itemExtent: 100,
           itemCount: plants.length,
           itemBuilder: (context, index) {
             final plant = plants[index];
-            return ListTile(
-              leading: Image.asset('images/seed.png'),
-              title: Text(plant['nickname']),
-              subtitle: Text(plant['name']),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailPage(
-                      name: plant['name'],
-                      nickname: plant['nickname'],
-                      date: plant['date'],
-                      lux: plant['lux'],
-                      temp: plant['temp'],
-                      humidity: plant['humidity'],
-                      info: plant['info'],
-                      water: plant['water'],
-                      special: plant['special'],
+            return Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Color.fromARGB(255, 198, 212, 183), width: 0.2), // 테두리 두께를 1로 지정
+              ),
+              child: ListTile(
+                leading: SizedBox(
+                  width: 80, 
+                  height: 80, 
+                  child: Image.asset('images/seed.png'),
+                ),
+                title: Text(
+                  plant['nickname'],
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600 , color: const Color.fromARGB(255, 105, 114, 118)), 
+                ),
+                subtitle: Text(
+                  plant['name'],
+                  style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 135, 197, 65)), // 이름 텍스트의 크기를 16으로 지정
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailPage(
+                        name: plant['name'],
+                        nickname: plant['nickname'],
+                        date: plant['date'],
+                        lux: plant['lux'],
+                        temp: plant['temp'],
+                        humidity: plant['humidity'],
+                        info: plant['info'],
+                        water: plant['water'],
+                        special: plant['special'],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             );
           },
         );

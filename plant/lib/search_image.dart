@@ -73,7 +73,7 @@ class _SearchImageState extends State<SearchImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search'),
+        title: const Text('이미지 텍스트로 식물 찾기'),
       ),
       body: Center(
         child: Column(
@@ -86,10 +86,10 @@ class _SearchImageState extends State<SearchImage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _findAndNavigateToPlantDetail(context),
-              child: const Text('Search'),
+              child: const Text('검색'),
             ),
             const SizedBox(height: 20),
-            Text(parsedtext.isNotEmpty ? parsedtext : 'No text extracted'),
+            Text(parsedtext.isNotEmpty ? parsedtext : '추출된 텍스트가 없습니다'),
           ],
         ),
       ),
