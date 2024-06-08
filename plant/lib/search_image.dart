@@ -54,6 +54,7 @@ class _SearchImageState extends State<SearchImage> {
       context,
       MaterialPageRoute(
         builder: (context) => AddPage(
+          id: plant.id,
           name: plant['name'],
           lux: plant['lux'],
           temp: plant['temp'],
