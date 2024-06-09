@@ -187,6 +187,7 @@ class PlantList extends StatelessWidget {
             final plant = plants[index];
             return Container(
               decoration: BoxDecoration(
+                color: Colors.white,
                 border: Border.all(
                     color: Color.fromARGB(255, 198, 212, 183), width: 0.6),
               ),
