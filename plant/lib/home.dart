@@ -290,9 +290,27 @@ class _WeatherState extends State<Weather> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("District Name: ${currentItem['districtName']}"),
-          Text("Issue Type: ${currentItem['issueGbn']}"),
-          Text("Item Code: ${currentItem['itemCode']}"),
+          Row(
+            children: [
+              Icon(Icons.place, color: Colors.lightBlue),
+              SizedBox(width: 10), 
+              Text("지역: ${currentItem['districtName']}"),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.warning, color: Colors.red),
+              SizedBox(width: 10),
+              Text("미세먼지 경보: ${currentItem['issueGbn']}"),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.masks, color: Colors.orange),
+              SizedBox(width: 10),
+              Text("미세먼지 농도: ${currentItem['itemCode']}"),
+            ],
+          ),
         ],
       ),
     );
