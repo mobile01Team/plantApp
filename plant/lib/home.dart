@@ -303,31 +303,33 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     }
 
     var currentItem = data[currentIndex];
-    return Container(
-      width: 250,
-      height: 80,
-      decoration: BoxDecoration(
-        color: Colors.blue,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "District: ${currentItem['districtName']}",
-              style: TextStyle(color: Color(0xffFFFCF2)),
-            ),
-            Text(
-              "Issue: ${currentItem['issueGbn']}",
-              style: TextStyle(color: Color(0xffFFFCF2)),
-            ),
-            Text(
-              "Code: ${currentItem['itemCode']}",
-              style: TextStyle(color: Color(0xffFFFCF2)),
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.place, color: Colors.lightBlue),
+              SizedBox(width: 10), 
+              Text("지역: ${currentItem['districtName']}"),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.warning, color: Colors.red),
+              SizedBox(width: 10),
+              Text("미세먼지 경보: ${currentItem['issueGbn']}"),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.masks, color: Colors.orange),
+              SizedBox(width: 10),
+              Text("미세먼지 농도: ${currentItem['itemCode']}"),
+            ],
+          ),
+        ],
       ),
     );
   }
