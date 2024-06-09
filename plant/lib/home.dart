@@ -132,25 +132,21 @@ class _HomeState extends State<Home> {
         ),
       )),
       backgroundColor: Color(0xffFFFCF2), // 배경 색 설정
-      body: Stack(
+      body: Column(
         children: [
-          Column(
-            children: [
-              Expanded(
-                child: user == null
-                    ? const Center(child: Text('로그인이 필요합니다'))
-                    : PlantList(userid: user!.uid),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: WeatherWidget(), // WeatherWidget을 사용하여 미세먼지 농도 표시
-            ),
+          Expanded(
+            child: user == null
+                ? const Center(child: Text('로그인이 필요합니다'))
+                : PlantList(userid: user!.uid),
           ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue),
+        ),
+        height: 100,
+        child: Weather(), // WeatherWidget을 사용하여 미세먼지 농도 표시
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green, // 버튼 배경색
@@ -240,14 +236,14 @@ class PlantList extends StatelessWidget {
   }
 }
 
-class WeatherWidget extends StatefulWidget {
-  const WeatherWidget({super.key});
+class Weather extends StatefulWidget {
+  const Weather({super.key});
 
   @override
-  State<WeatherWidget> createState() => _WeatherWidgetState();
+  State<Weather> createState() => _WeatherState();
 }
 
-class _WeatherWidgetState extends State<WeatherWidget> {
+class _WeatherState extends State<Weather> {
   List<Map<String, dynamic>> data = [];
   int currentIndex = 0;
   Timer? timer;
@@ -260,7 +256,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
 
   Future<void> fetchData() async {
     final response = await http.get(Uri.parse(
-        'https://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo?serviceKey=Bq6DjrvIf%2Fb5oaNZWPWvLHgaiTUOk67Iaj9Gfij2hloyxagHOmXrTJBKB7Hp4KYsPx46M%2B9zeb6mmPPU4CFJug%3D%3D&returnType=json&numOfRows=100&year=2024'));
+        'https://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo?serviceKey=Bq6DjrvIf%2Fb5oaNZWPWvLHgaiTUOk67Iaj9Gfij2hloyxagHOmXrTJBKB7Hp4KYsPx46M%2B9zeb6mmPPU4CFJug%3D%3D&returnType=xml&numOfRows=100&pageNo=1&year=2024'));
 
     if (response.statusCode == 200) {
       final parsed = xmlParse(response.body);
@@ -311,7 +307,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
           Row(
             children: [
               Icon(Icons.place, color: Colors.lightBlue),
-              SizedBox(width: 10), 
+              SizedBox(width: 10),
               Text("지역: ${currentItem['districtName']}"),
             ],
           ),
