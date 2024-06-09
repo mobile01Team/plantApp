@@ -143,7 +143,12 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Geolocator Page'),
+        backgroundColor: Colors.green,
+        title: const Text('내 주변 꽃집 찾기',
+            style: TextStyle(
+              color: Color(0xffFFFCF2),
+              fontWeight: FontWeight.w600,
+            )),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.wb_sunny),
@@ -165,6 +170,66 @@ class _SearchState extends State<Search> {
                       Marker(
                         markerId: const MarkerId('currentLocation'),
                         position: _currentPosition!,
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("녹심"),
+                        position: LatLng(36.089890, 129.389751),
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("꽃집르지오"),
+                        position: LatLng(36.088771, 129.388273),
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("여리"),
+                        position: LatLng(36.084761, 129.397347),
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("솔레유플라워"),
+                        position: LatLng(36.083162, 129.396231),
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("벨로아츠"),
+                        position: LatLng(36.082149, 129.397136),
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("플라워로그"),
+                        position: LatLng(36.082307, 129.399282),
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("메이릴리플라워"),
+                        position: LatLng(36.082650, 129.401111),
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("엔플레르"),
+                        position: LatLng(36.083281, 129.401305),
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("은꽃"),
+                        position: LatLng(36.082851, 129.384657),
+                      ),
+                      Marker(
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose),
+                        markerId: const MarkerId("가을흔적"),
+                        position: LatLng(36.082832, 129.383084),
                       ),
                     },
             ),
