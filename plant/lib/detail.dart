@@ -1,14 +1,14 @@
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:plant/main.dart';
-import 'package:plant/search.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class DetailPage extends StatefulWidget {
   final String name;
@@ -38,7 +38,8 @@ class DetailPage extends StatefulWidget {
   _DetailPageState createState() => _DetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateMixin {
+class _DetailPageState extends State<DetailPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   Map<String, dynamic>? _weatherData;
   bool _isFetchingWeather = false;
@@ -57,8 +58,10 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
     });
 
     try {
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      Map<String, dynamic> weatherData = await fetchWeather(position.latitude, position.longitude);
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      Map<String, dynamic> weatherData =
+          await fetchWeather(position.latitude, position.longitude);
       setState(() {
         _weatherData = weatherData;
       });
@@ -74,7 +77,8 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
 
   Future<Map<String, dynamic>> fetchWeather(double lat, double lon) async {
     const apiKey = '3621bc74ad5b93efe4651dd92bb5378c'; // OpenWeatherMap API 키
-    final url = 'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&units=metric&appid=$apiKey';
+    final url =
+        'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&units=metric&appid=$apiKey';
 
     final response = await http.get(Uri.parse(url));
 
@@ -86,13 +90,15 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
   }
 
   Future<void> _showNotification(String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
       'water_channel',
       'Water Notifications',
       importance: Importance.max,
       priority: Priority.high,
     );
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
       0,
       title,
@@ -141,19 +147,25 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.name),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Search()),
-              );
-            },
-          ),
-        ],
-      ),
+          backgroundColor: Colors.green,
+          title: Text(widget.name,
+              style: TextStyle(
+                color: Color(0xffFFFCF2),
+                fontWeight: FontWeight.w600,
+              )),
+          // actions: [
+          //   IconButton(
+          //     icon: const Icon(Icons.search),
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(builder: (context) => const Search()),
+          //       );
+          //     },
+          //   ),
+          // ],
+          iconTheme: const IconThemeData(color: Color(0xffFFFCF2))),
+      backgroundColor: Color(0xffFFFCF2),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -166,11 +178,11 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(66, 226, 247, 213),
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
-                    ),
+                    // BoxShadow(
+                    //   color: Colors.white,
+                    //   blurRadius: 10,
+                    //   offset: Offset(0, 5),
+                    // ),
                   ],
                 ),
                 child: ClipRRect(
@@ -190,7 +202,7 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
             Row(
               children: [
                 Shimmer.fromColors(
-                  baseColor: const Color.fromARGB(255, 70, 69, 69),
+                  baseColor: const Color.fromARGB(255, 7, 69, 69),
                   highlightColor: const Color.fromARGB(255, 140, 188, 96),
                   child: Text(
                     widget.nickname,
@@ -241,6 +253,9 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
             const SizedBox(height: 16),
             TabBar(
               controller: _tabController,
+              indicatorColor: Colors.green, // 탭 선택 시 아래쪽에 표시되는 선 색상
+              labelColor: Colors.green, // 선택된 탭의 텍스트 색상
+              unselectedLabelColor: Colors.grey, // 선택되지 않은 탭의 텍스트 색상
               tabs: const [
                 Tab(text: '현재 날씨 상태'),
                 Tab(text: '키우는 법'),
@@ -259,16 +274,23 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                             ? const CircularProgressIndicator()
                             : _weatherData != null
                                 ? Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
-                                          const Icon(Icons.thermostat_outlined, color: Colors.orange), 
+                                          const Icon(Icons.thermostat_outlined,
+                                              color: Colors.orange),
                                           const Text(
                                             '온도: ',
-                                            style: TextStyle(fontSize: 16),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Color(0xff3D3D3D)),
                                           ),
-                                          SizedBox(width: 60,height: 60,),
+                                          SizedBox(
+                                            width: 60,
+                                            height: 60,
+                                          ),
                                           SizedBox(
                                             width: 150,
                                             height: 150,
@@ -276,20 +298,32 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                                               PieChartData(
                                                 sections: [
                                                   PieChartSectionData(
-                                                    value: (_weatherData!['main']['temp'] as num).toDouble(),
-                                                    title: '${_weatherData!['main']['temp']}°C',
+                                                    value:
+                                                        (_weatherData!['main']
+                                                                ['temp'] as num)
+                                                            .toDouble(),
+                                                    title:
+                                                        '${_weatherData!['main']['temp']}°C',
                                                     titleStyle: const TextStyle(
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.white,
                                                     ),
-                                                    color: Color.fromRGBO(245, 162, 7, 1),
+                                                    color: Color.fromRGBO(
+                                                        245, 162, 7, 1),
                                                     radius: 70,
                                                   ),
                                                   PieChartSectionData(
-                                                    value: (40 - (_weatherData!['main']['temp'] as num)).toDouble(),
+                                                    value: (40 -
+                                                            (_weatherData![
+                                                                        'main']
+                                                                    ['temp']
+                                                                as num))
+                                                        .toDouble(),
                                                     title: '',
-                                                    color: Color.fromRGBO(240, 186, 85, 1),
+                                                    color: Color.fromRGBO(
+                                                        240, 186, 85, 1),
                                                     radius: 70,
                                                   ),
                                                 ],
@@ -303,12 +337,18 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                                       const SizedBox(height: 16),
                                       Row(
                                         children: [
-                                          const Icon(Icons.opacity_outlined, color: Colors.lightGreen), 
+                                          const Icon(Icons.opacity_outlined,
+                                              color: Colors.lightGreen),
                                           const Text(
                                             '습도: ',
-                                            style: TextStyle(fontSize: 16),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Color(0xff3D3D3D)),
                                           ),
-                                          SizedBox(width: 60,height: 60,),
+                                          SizedBox(
+                                            width: 60,
+                                            height: 60,
+                                          ),
                                           SizedBox(
                                             width: 150,
                                             height: 150,
@@ -316,20 +356,32 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                                               PieChartData(
                                                 sections: [
                                                   PieChartSectionData(
-                                                    value: (_weatherData!['main']['humidity'] as num).toDouble(),
-                                                    title: '${_weatherData!['main']['humidity']}%',
+                                                    value:
+                                                        (_weatherData!['main']
+                                                                    ['humidity']
+                                                                as num)
+                                                            .toDouble(),
+                                                    title:
+                                                        '${_weatherData!['main']['humidity']}%',
                                                     titleStyle: const TextStyle(
                                                       fontSize: 18,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.white,
                                                     ),
                                                     color: Colors.green,
                                                     radius: 70,
                                                   ),
                                                   PieChartSectionData(
-                                                    value: (100 - (_weatherData!['main']['humidity'] as num)).toDouble(),
+                                                    value: (100 -
+                                                            (_weatherData![
+                                                                        'main']
+                                                                    ['humidity']
+                                                                as num))
+                                                        .toDouble(),
                                                     title: '',
-                                                    color: Color.fromARGB(255, 187, 244, 209),
+                                                    color: Color.fromARGB(
+                                                        255, 187, 244, 209),
                                                     radius: 70,
                                                   ),
                                                 ],
@@ -340,15 +392,26 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 16,),
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
                                       Row(
                                         children: [
-                                          const Icon(Icons.wind_power_outlined, color: Color.fromARGB(255, 127, 203, 238),), 
+                                          const Icon(
+                                            Icons.wind_power_outlined,
+                                            color: Color.fromARGB(
+                                                255, 127, 203, 238),
+                                          ),
                                           const Text(
                                             '풍속: ',
-                                            style: TextStyle(fontSize: 16),
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Color(0xff3D3D3D)),
                                           ),
-                                          SizedBox(width: 60,height: 60,),
+                                          SizedBox(
+                                            width: 60,
+                                            height: 60,
+                                          ),
                                           SizedBox(
                                             width: 150,
                                             height: 150,
@@ -356,20 +419,32 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                                               PieChartData(
                                                 sections: [
                                                   PieChartSectionData(
-                                                    value: (_weatherData!['wind']['speed'] as num).toDouble(),
-                                                    title: '${_weatherData!['wind']['speed']}%',
+                                                    value:
+                                                        (_weatherData!['wind']
+                                                                    ['speed']
+                                                                as num)
+                                                            .toDouble(),
+                                                    title:
+                                                        '${_weatherData!['wind']['speed']}%',
                                                     titleStyle: const TextStyle(
                                                       fontSize: 18,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.white,
                                                     ),
                                                     color: Colors.lightBlue,
                                                     radius: 70,
                                                   ),
                                                   PieChartSectionData(
-                                                    value: (54 - (_weatherData!['wind']['speed'] as num)).toDouble(),
+                                                    value: (54 -
+                                                            (_weatherData![
+                                                                        'wind']
+                                                                    ['speed']
+                                                                as num))
+                                                        .toDouble(),
                                                     title: '',
-                                                    color: Color.fromARGB(255, 132, 210, 255),
+                                                    color: Color.fromARGB(
+                                                        255, 132, 210, 255),
                                                     radius: 70,
                                                   ),
                                                 ],
@@ -380,7 +455,6 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                                           ),
                                         ],
                                       ),
-                                      
                                     ],
                                   )
                                 : const Text(
@@ -399,12 +473,16 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.wb_sunny_outlined, color: Colors.orange), 
+                              const Icon(Icons.wb_sunny_outlined,
+                                  color: Colors.orange),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   widget.lux,
-                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff3D3D3D)),
                                   overflow: TextOverflow.clip,
                                 ),
                               ),
@@ -413,12 +491,18 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                           const SizedBox(height: 16),
                           Row(
                             children: [
-                              const Icon(Icons.thermostat_outlined, color: Colors.lightGreen,), 
+                              const Icon(
+                                Icons.thermostat_outlined,
+                                color: Colors.lightGreen,
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   widget.temp,
-                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff3D3D3D)),
                                   overflow: TextOverflow.clip,
                                 ),
                               ),
@@ -427,12 +511,18 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                           const SizedBox(height: 16),
                           Row(
                             children: [
-                              const Icon(Icons.opacity_outlined, color: Color.fromARGB(255, 127, 203, 238),), 
+                              const Icon(
+                                Icons.opacity_outlined,
+                                color: Color.fromARGB(255, 127, 203, 238),
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   widget.humidity,
-                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff3D3D3D)),
                                   overflow: TextOverflow.clip,
                                 ),
                               ),
@@ -441,12 +531,18 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                           const SizedBox(height: 16),
                           Row(
                             children: [
-                              const Icon(Icons.format_color_fill, color: Colors.lightBlue,), 
+                              const Icon(
+                                Icons.format_color_fill,
+                                color: Colors.lightBlue,
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   widget.water,
-                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff3D3D3D)),
                                   overflow: TextOverflow.clip,
                                 ),
                               ),
@@ -455,7 +551,10 @@ class _DetailPageState extends State<DetailPage> with SingleTickerProviderStateM
                           const SizedBox(height: 16),
                           Text(
                             '${widget.info}',
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 56, 66, 72)),
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff3D3D3D)),
                           ),
                         ],
                       ),
