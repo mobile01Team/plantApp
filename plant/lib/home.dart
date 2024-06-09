@@ -41,21 +41,30 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('내 식물 리스트'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.image_search),
-            onPressed: () {
-              // Search 페이지로 네비게이션
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SearchImage()),
-              );
-            },
-          ),
-        ],
-      ),
+          backgroundColor: Colors.green,
+          title: const Text('내 식물 리스트',
+              style: TextStyle(
+                color: Color(0xffFFFCF2),
+                fontWeight: FontWeight.w600,
+              )),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.image_search),
+              onPressed: () {
+                // Search 페이지로 네비게이션
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SearchImage()),
+                );
+              },
+            ),
+          ],
+          iconTheme: const IconThemeData(color: Color(0xffFFFCF2))),
       drawer: Drawer(
+          child: Container(
+        decoration: BoxDecoration(
+          color: Color(0xffFFFCF2), // Drawer 배경 색 설정
+        ),
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -66,7 +75,7 @@ class _HomeState extends State<Home> {
               child: Text(
                 '메뉴',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Color(0xffFFFCF2),
                   fontSize: 24,
                 ),
               ),
@@ -121,22 +130,31 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-      ),
-      body: Column(
+      )),
+      backgroundColor: Color(0xffFFFCF2), // 배경 색 설정
+      body: Stack(
         children: [
-          Expanded(
-            child: user == null
-                ? const Center(child: Text('로그인이 필요합니다'))
-                : PlantList(userid: user!.uid),
+          Column(
+            children: [
+              Expanded(
+                child: user == null
+                    ? const Center(child: Text('로그인이 필요합니다'))
+                    : PlantList(userid: user!.uid),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: WeatherWidget(), // WeatherWidget을 사용하여 미세먼지 농도 표시
+            ),
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
-        height: 100,
-        child: Weather(),
-      ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green, // 버튼 배경색
+        foregroundColor: Color(0xffFFFCF2), // 아이콘 색상
         onPressed: () {
           Navigator.push(
             context,
@@ -222,14 +240,14 @@ class PlantList extends StatelessWidget {
   }
 }
 
-class Weather extends StatefulWidget {
-  const Weather({super.key});
+class WeatherWidget extends StatefulWidget {
+  const WeatherWidget({super.key});
 
   @override
-  State<Weather> createState() => _WeatherState();
+  State<WeatherWidget> createState() => _WeatherWidgetState();
 }
 
-class _WeatherState extends State<Weather> {
+class _WeatherWidgetState extends State<WeatherWidget> {
   List<Map<String, dynamic>> data = [];
   int currentIndex = 0;
   Timer? timer;
@@ -242,7 +260,7 @@ class _WeatherState extends State<Weather> {
 
   Future<void> fetchData() async {
     final response = await http.get(Uri.parse(
-        'https://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo?serviceKey=Bq6DjrvIf%2Fb5oaNZWPWvLHgaiTUOk67Iaj9Gfij2hloyxagHOmXrTJBKB7Hp4KYsPx46M%2B9zeb6mmPPU4CFJug%3D%3D&returnType=xml&numOfRows=100&pageNo=1&year=2024'));
+        'https://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo?serviceKey=Bq6DjrvIf%2Fb5oaNZWPWvLHgaiTUOk67Iaj9Gfij2hloyxagHOmXrTJBKB7Hp4KYsPx46M%2B9zeb6mmPPU4CFJug%3D%3D&returnType=json&numOfRows=100&year=2024'));
 
     if (response.statusCode == 200) {
       final parsed = xmlParse(response.body);
