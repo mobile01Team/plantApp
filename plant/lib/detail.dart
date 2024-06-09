@@ -148,7 +148,7 @@ class _DetailPageState extends State<DetailPage>
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.green,
-          title: Text(widget.name,
+          title: Text(widget.nickname,
               style: TextStyle(
                 color: Color(0xffFFFCF2),
                 fontWeight: FontWeight.w600,

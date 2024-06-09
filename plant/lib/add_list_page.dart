@@ -23,11 +23,11 @@ class AddListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.green,
-          title: const Text('Add Plant List',
+          title: const Text('키우는 식물을 선택해주세요!',
               style: TextStyle(
-                color: Color(0xffFFFCF2),
-                fontWeight: FontWeight.w600,
-              )),
+                  color: Color(0xffFFFCF2),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20)),
           iconTheme: const IconThemeData(color: Color(0xffFFFCF2))),
       backgroundColor: const Color(0xffFFFCF2),
       body: StreamBuilder<QuerySnapshot>(
