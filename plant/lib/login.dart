@@ -15,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xffFFFCF2),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,32 +36,37 @@ class _LoginPageState extends State<LoginPage> {
                     height: 50, // 원하는 크기로 조정
                   ),
                   const SizedBox(height: 40),
-                  InkWell(
-                    onTap: () {
-                      // 구글 로그인 함수 호출
-                      _signInWithGoogle();
-                    },
-                    child: Card(
-                      margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                      elevation: 2,
-                      color: const Color(0xffDFBE8D),
-                      child: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(width: 5),
-                            Text(
-                              "Sign In With Google",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
+                  Center(
+                    child: Container(
+                      width: 250, // 원하는 가로 크기로 조정
+                      child: InkWell(
+                        onTap: () {
+                          // 구글 로그인 함수 호출
+                          _signInWithGoogle();
+                        },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          elevation: 2,
+                          color: const Color(0xffDFBE8D),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 5),
+                                Text(
+                                  "구글 로그인 하기",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),

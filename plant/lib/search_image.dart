@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
 import 'add.dart';
 
 class SearchImage extends StatefulWidget {
@@ -18,7 +20,8 @@ class _SearchImageState extends State<SearchImage> {
   bool _textExtracted = false; // 텍스트 추출 완료 여부를 나타내는 플래그
 
   Future<void> _getFromGallery() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
 
     var bytes = File(pickedFile.path.toString()).readAsBytesSync();
@@ -41,56 +44,79 @@ class _SearchImageState extends State<SearchImage> {
   }
 
   Future<void> _findAndNavigateToPlantDetail(BuildContext context) async {
-  if (!_textExtracted) return; // 텍스트 추출이 완료되지 않았으면 함수 종료
+    if (!_textExtracted) return; // 텍스트 추출이 완료되지 않았으면 함수 종료
 
-  final snapshot = await FirebaseFirestore.instance
-      .collection('PlantList')
-      .where('name', isEqualTo: parsedtext.trim()) // trim()으로 앞뒤 공백 제거
-      .get();
+    final snapshot = await FirebaseFirestore.instance
+        .collection('PlantList')
+        .where('name', isEqualTo: parsedtext.trim()) // trim()으로 앞뒤 공백 제거
+        .get();
 
-  if (snapshot.docs.isNotEmpty) {
-    final plant = snapshot.docs[0];
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddPage(
-          id: plant.id,
-          name: plant['name'],
-          lux: plant['lux'],
-          temp: plant['temp'],
-          humidity: plant['humidity'],
-          info: plant['info'],
-          water: plant['water'],
-          special: plant['special'],
+    if (snapshot.docs.isNotEmpty) {
+      final plant = snapshot.docs[0];
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddPage(
+            id: plant.id,
+            name: plant['name'],
+            lux: plant['lux'],
+            temp: plant['temp'],
+            humidity: plant['humidity'],
+            info: plant['info'],
+            water: plant['water'],
+            special: plant['special'],
+          ),
         ),
-      ),
-    );
-  } else {
-   
+      );
+    } else {}
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('이미지 텍스트로 식물 찾기'),
-      ),
+          backgroundColor: Colors.green,
+          title: const Text('이미지 텍스트로 식물찾기',
+              style: TextStyle(
+                color: Color(0xffFFFCF2),
+                fontWeight: FontWeight.w600,
+                fontSize: 19.5,
+              )),
+          iconTheme: const IconThemeData(color: Color(0xffFFFCF2))),
+      backgroundColor: Color(0xffFFFCF2),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue, // Background color
+                foregroundColor: Colors.white, // Text color
+              ),
               onPressed: _getFromGallery,
-              child: const Text('Select Image from Gallery'),
+              child: const Text(
+                '갤러리에서 사진 고르기',
+                style: TextStyle(
+                    color: Color(0xffFFFCF2), fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, // Background color
+                foregroundColor: Colors.white, // Text color
+              ),
               onPressed: () => _findAndNavigateToPlantDetail(context),
-              child: const Text('검색'),
+              child: const Text(
+                '검색',
+                style: TextStyle(
+                    color: Color(0xffFFFCF2), fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 20),
-            Text(parsedtext.isNotEmpty ? parsedtext : '추출된 텍스트가 없습니다'),
+            Text(parsedtext.isNotEmpty ? parsedtext : '추출된 텍스트가 없습니다',
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.w300)),
           ],
         ),
       ),

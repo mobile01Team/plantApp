@@ -100,13 +100,20 @@ class _SearchState extends State<Search> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Weather Information'),
+          backgroundColor: Colors.green,
+          title: const Text(
+            '내 위치 날씨 정보',
+            style: TextStyle(color: Color(0xffFFFCF2)),
+          ),
           content: _weatherData != null
               ? _buildWeatherContent()
               : const CircularProgressIndicator(),
           actions: <Widget>[
             TextButton(
-              child: const Text('Close'),
+              child: const Text(
+                '닫기',
+                style: TextStyle(color: Color(0xffFFFCF2)),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -118,44 +125,55 @@ class _SearchState extends State<Search> {
   }
 
   Widget _buildWeatherContent() {
+    final TextStyle textStyle = TextStyle(
+      color: Color(0xffFFFCF2),
+      fontSize: 16.0, // 텍스트 크기를 18로 설정
+    );
+
     if (_weatherData == null || _weatherData!.containsKey('error')) {
-      return Text(_weatherData?['error'] ?? 'Unknown error');
+      return Text(
+        _weatherData?['error'] ?? 'Unknown error',
+        style: textStyle,
+      );
     }
 
     return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('City: ${_weatherData!['name']}'),
-          Text('Temperature: ${_weatherData!['main']['temp']}°C'),
-          Text('Feels like: ${_weatherData!['main']['feels_like']}°C'),
-          Text('Pressure: ${_weatherData!['main']['pressure']} hPa'),
-          Text('Humidity: ${_weatherData!['main']['humidity']}%'),
-          Text('Weather: ${_weatherData!['weather'][0]['description']}'),
-          Text('Wind Speed: ${_weatherData!['wind']['speed']} m/s'),
-          Text('Wind Direction: ${_weatherData!['wind']['deg']}°'),
-          Text('Cloudiness: ${_weatherData!['clouds']['all']}%'),
-          Text('Visibility: ${_weatherData!['visibility']} meters'),
-        ]);
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text('도시: ${_weatherData!['name']}', style: textStyle),
+        Text('온도: ${_weatherData!['main']['temp']}°C', style: textStyle),
+        Text('체감온도: ${_weatherData!['main']['feels_like']}°C',
+            style: textStyle),
+        Text('기압: ${_weatherData!['main']['pressure']} hPa', style: textStyle),
+        Text('습도: ${_weatherData!['main']['humidity']}%', style: textStyle),
+        Text('날씨: ${_weatherData!['weather'][0]['description']}',
+            style: textStyle),
+        Text('풍속: ${_weatherData!['wind']['speed']} m/s', style: textStyle),
+        Text('풍향: ${_weatherData!['wind']['deg']}°', style: textStyle),
+        Text('구름: ${_weatherData!['clouds']['all']}%', style: textStyle),
+        Text('가시거리: ${_weatherData!['visibility']} meters', style: textStyle),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: const Text('내 주변 꽃집 찾기',
-            style: TextStyle(
-              color: Color(0xffFFFCF2),
-              fontWeight: FontWeight.w600,
-            )),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.wb_sunny),
-            onPressed: _showWeatherDialog,
-          ),
-        ],
-      ),
+          backgroundColor: Colors.green,
+          title: const Text('내 주변 꽃집 찾기',
+              style: TextStyle(
+                color: Color(0xffFFFCF2),
+                fontWeight: FontWeight.w600,
+              )),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.wb_sunny),
+              onPressed: _showWeatherDialog,
+            ),
+          ],
+          iconTheme: const IconThemeData(color: Color(0xffFFFCF2))),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : GoogleMap(
