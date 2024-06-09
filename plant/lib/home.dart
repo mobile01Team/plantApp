@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
                 color: Colors.green,
               ),
               child: Text(
-                '메뉴',
+                'Menu',
                 style: TextStyle(
                   color: Color(0xffFFFCF2),
                   fontSize: 24,
@@ -188,21 +188,32 @@ class PlantList extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                    color: Color.fromARGB(255, 198, 212, 183),
-                    width: 0.2), // 테두리 두께를 1로 지정
+                    color: Color.fromARGB(255, 198, 212, 183), width: 0.6),
               ),
               child: ListTile(
-                leading: SizedBox(
+                contentPadding: const EdgeInsets.all(16),
+                leading: Container(
                   width: 80,
                   height: 80,
-                  child: Image.asset('images/seed.png'),
+                  // decoration: BoxDecoration(
+                  //   border: Border.all(
+                  //       color: Colors.green, width: 2),
+                  //   borderRadius: BorderRadius.circular(8),
+                  // ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Image.asset('images/seed.png'),
+                  ),
                 ),
-                title: Text(
-                  plant['nickname'],
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: const Color.fromARGB(255, 105, 114, 118)),
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    plant['nickname'],
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xff3D3D3D)),
+                  ),
                 ),
                 subtitle: Text(
                   plant['name'],
@@ -300,7 +311,7 @@ class _WeatherState extends State<Weather> {
 
     var currentItem = data[currentIndex];
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      padding: const EdgeInsets.fromLTRB(30, 8, 16, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -308,21 +319,30 @@ class _WeatherState extends State<Weather> {
             children: [
               Icon(Icons.place, color: Colors.lightBlue),
               SizedBox(width: 10),
-              Text("지역: ${currentItem['districtName']}"),
+              Text(
+                "지역: ${currentItem['districtName']}",
+                style: TextStyle(color: Color(0xff3D3D3D)),
+              ),
             ],
           ),
           Row(
             children: [
               Icon(Icons.warning, color: Colors.red),
               SizedBox(width: 10),
-              Text("미세먼지 경보: ${currentItem['issueGbn']}"),
+              Text(
+                "미세먼지 경보: ${currentItem['issueGbn']}",
+                style: TextStyle(color: Color(0xff3D3D3D)),
+              ),
             ],
           ),
           Row(
             children: [
               Icon(Icons.masks, color: Colors.orange),
               SizedBox(width: 10),
-              Text("미세먼지 농도: ${currentItem['itemCode']}"),
+              Text(
+                "미세먼지 농도: ${currentItem['itemCode']}",
+                style: TextStyle(color: Color(0xff3D3D3D)),
+              ),
             ],
           ),
         ],
