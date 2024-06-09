@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart'; // firebase_storage 패키지 추가
+import 'package:flutter/material.dart';
+
 import 'add.dart'; // add.dart 파일을 임포트합니다
 
 class AddListPage extends StatelessWidget {
@@ -21,10 +22,17 @@ class AddListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Plant List'),
-      ),
+          backgroundColor: Colors.green,
+          title: const Text('Add Plant List',
+              style: TextStyle(
+                color: Color(0xffFFFCF2),
+                fontWeight: FontWeight.w600,
+              )),
+          iconTheme: const IconThemeData(color: Color(0xffFFFCF2))),
+      backgroundColor: const Color(0xffFFFCF2),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('addPlantList').snapshots(),
+        stream:
+            FirebaseFirestore.instance.collection('addPlantList').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -83,13 +91,15 @@ class AddListPage extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   ),
                           ),
-                          Padding(
+                          Container(
+                            color: Colors.green, // 원하는 배경 색상으로 변경
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               plant['name'],
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.white, // 텍스트 색상도 변경 가능
                               ),
                               textAlign: TextAlign.center,
                             ),
