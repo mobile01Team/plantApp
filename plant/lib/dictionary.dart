@@ -36,23 +36,6 @@ class _DictionaryState extends State<Dictionary> {
             )),
         backgroundColor: Colors.green,
         iconTheme: const IconThemeData(color: Color(0xffFFFCF2)),
-        actions: [
-          DropdownButton<String>(
-            value: selectedType,
-            items:
-                <String>['All', 'Type1', 'Type2', 'Type3'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedType = value!;
-              });
-            },
-          ),
-        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream:
@@ -83,50 +66,86 @@ class _DictionaryState extends State<Dictionary> {
                               child: CircularProgressIndicator());
                         }
                         final imageUrl = imageUrlSnapshot.data!;
-                        return Card(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 40, horizontal: 15),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Center(
-                                  child: imageUrl.isNotEmpty
-                                      ? Image.network(
-                                          imageUrl,
-                                          width: 200,
-                                          height: 200,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Image.asset(
-                                          'images/seed.png',
-                                          width: 200,
-                                          height: 200,
-                                          fit: BoxFit.cover,
-                                        ),
-                                ),
-                                const SizedBox(height: 16),
-                                Row(
+                        return Stack(
+                          children: [
+                            Card(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 40, horizontal: 15),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(16, 30, 16, 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Shimmer.fromColors(
-                                      baseColor:
-                                          const Color.fromARGB(255, 7, 69, 69),
-                                      highlightColor: const Color.fromARGB(
-                                          255, 140, 188, 96),
-                                      child: Text(
-                                        plant['name'],
-                                        style: const TextStyle(fontSize: 24),
-                                      ),
+                                    Center(
+                                      child: imageUrl.isNotEmpty
+                                          ? Image.network(
+                                              imageUrl,
+                                              width: 200,
+                                              height: 200,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.asset(
+                                              'images/seed.png',
+                                              width: 200,
+                                              height: 200,
+                                              fit: BoxFit.cover,
+                                            ),
                                     ),
-                                    const SizedBox(width: 8),
+                                    const SizedBox(height: 16),
+                                    Row(
+                                      children: [
+                                        Shimmer.fromColors(
+                                          baseColor: const Color.fromARGB(
+                                              255, 7, 69, 69),
+                                          highlightColor: const Color.fromARGB(
+                                              255, 140, 188, 96),
+                                          child: Text(
+                                            plant['name'],
+                                            style:
+                                                const TextStyle(fontSize: 24),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Container(
+                                          padding: const EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                                color: Colors.lightGreen,
+                                                width: 2),
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: Colors.black12,
+                                                blurRadius: 6,
+                                                offset: Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Shimmer.fromColors(
+                                            baseColor: Colors.lightBlue,
+                                            highlightColor:
+                                                const Color.fromARGB(
+                                                    255, 169, 176, 159),
+                                            child: Text(
+                                              plant['special'],
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16),
                                     Container(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(16.0),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                            color: Colors.lightGreen, width: 2),
+                                        borderRadius: BorderRadius.circular(16),
                                         boxShadow: const [
                                           BoxShadow(
                                             color: Colors.black12,
@@ -135,114 +154,120 @@ class _DictionaryState extends State<Dictionary> {
                                           ),
                                         ],
                                       ),
-                                      child: Shimmer.fromColors(
-                                        baseColor: Colors.lightBlue,
-                                        highlightColor: const Color.fromARGB(
-                                            255, 169, 176, 159),
-                                        child: Text(
-                                          plant['special'],
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Icon(
+                                                  Icons.wb_sunny_outlined,
+                                                  color: Colors.orange),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  plant['lux'],
+                                                  style: const TextStyle(
+                                                      fontSize: 18),
+                                                  overflow: TextOverflow.clip,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
+                                          const SizedBox(height: 16),
+                                          Row(
+                                            children: [
+                                              const Icon(
+                                                  Icons.thermostat_outlined,
+                                                  color: Colors.lightGreen),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  plant['temp'],
+                                                  style: const TextStyle(
+                                                      fontSize: 18),
+                                                  overflow: TextOverflow.clip,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.opacity_outlined,
+                                                  color: Color.fromARGB(
+                                                      255, 127, 203, 238)),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  plant['humidity'],
+                                                  style: const TextStyle(
+                                                      fontSize: 18),
+                                                  overflow: TextOverflow.clip,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Row(
+                                            children: [
+                                              const Icon(
+                                                  Icons.format_color_fill,
+                                                  color: Colors.lightBlue),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: Text(
+                                                  plant['water'],
+                                                  style: const TextStyle(
+                                                      fontSize: 18),
+                                                  overflow: TextOverflow.clip,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 16),
+                                          Text(
+                                            plant['info'],
+                                            style:
+                                                const TextStyle(fontSize: 18),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 16),
-                                Container(
-                                  padding: const EdgeInsets.all(16.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 6,
-                                        offset: Offset(0, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.wb_sunny_outlined,
-                                              color: Colors.orange),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              plant['lux'],
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                              overflow: TextOverflow.clip,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.thermostat_outlined,
-                                              color: Colors.lightGreen),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              plant['temp'],
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                              overflow: TextOverflow.clip,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.opacity_outlined,
-                                              color: Color.fromARGB(
-                                                  255, 127, 203, 238)),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              plant['humidity'],
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                              overflow: TextOverflow.clip,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.format_color_fill,
-                                              color: Colors.lightBlue),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              plant['water'],
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                              overflow: TextOverflow.clip,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Text(
-                                        plant['info'],
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
+                            Positioned(
+                              top: 10,
+                              right: 10,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: selectedType,
+                                  items: <String>[
+                                    'All',
+                                    '키우기 쉬움',
+                                    '공기정화',
+                                    '향이 좋음',
+                                    '진정효과',
+                                    '가습효과'
+                                  ].map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedType = value!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       },
                     );
