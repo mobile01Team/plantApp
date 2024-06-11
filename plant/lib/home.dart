@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:http/http.dart' as http;
+import 'package:plant/dictionary.dart';
 import 'package:xml/xml.dart';
 
 import 'add_list_page.dart';
@@ -77,9 +78,9 @@ class _HomeState extends State<Home> {
                 child: Text(
                   'Menu',
                   style: TextStyle(
-                    color: Color(0xffFFFCF2),
-                    fontSize: 24,
-                  ),
+                      color: Color(0xffFFFCF2),
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800),
                 ),
               ),
               ListTile(
@@ -91,7 +92,8 @@ class _HomeState extends State<Home> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AddListPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const AddListPage()),
                   );
                 },
               ),
@@ -117,7 +119,21 @@ class _HomeState extends State<Home> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SearchImage()),
+                    MaterialPageRoute(
+                        builder: (context) => const SearchImage()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(
+                  Icons.bookmark_outlined,
+                  color: Colors.pinkAccent,
+                ),
+                title: const Text('식물 도감'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Dictionary()),
                   );
                 },
               ),
@@ -198,7 +214,8 @@ class AnimatedPlantList extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(
-                            color: Color.fromARGB(255, 198, 212, 183), width: 0.6),
+                            color: Color.fromARGB(255, 198, 212, 183),
+                            width: 0.6),
                       ),
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(16),
@@ -223,7 +240,8 @@ class AnimatedPlantList extends StatelessWidget {
                         subtitle: Text(
                           plant['name'],
                           style: TextStyle(
-                              fontSize: 16, color: Color.fromARGB(255, 135, 197, 65)),
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 135, 197, 65)),
                         ),
                         onTap: () {
                           Navigator.push(
@@ -255,7 +273,6 @@ class AnimatedPlantList extends StatelessWidget {
     );
   }
 }
-
 
 class Weather extends StatefulWidget {
   const Weather({super.key});
