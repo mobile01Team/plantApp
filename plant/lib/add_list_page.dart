@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart'; // firebase_storage 패키지 추가
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
-import 'add.dart'; // add.dart 파일을 임포트합니다
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart'; 
+import 'add.dart'; 
 
 class AddListPage extends StatelessWidget {
   const AddListPage({super.key});
@@ -13,7 +13,7 @@ class AddListPage extends StatelessWidget {
       final ref = FirebaseStorage.instance.ref().child('$imageName.png');
       return await ref.getDownloadURL();
     } catch (e) {
-      // 오류가 발생할 경우 빈 문자열 반환
+      
       return '';
     }
   }
@@ -39,78 +39,90 @@ class AddListPage extends StatelessWidget {
           }
           final plants = snapshot.data!.docs;
 
-          return GridView.builder(
-            padding: const EdgeInsets.all(10),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, // 가로로 3개의 아이템을 배치
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 0.75, // 카드의 가로 세로 비율
-            ),
-            itemCount: plants.length,
-            itemBuilder: (context, index) {
-              final plant = plants[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddPage(
-                        id: plant.id, // 문서 ID를 AddPage로 전달
-                        name: plant['name'],
-                        lux: plant['lux'],
-                        temp: plant['temp'],
-                        humidity: plant['humidity'],
-                        info: plant['info'],
-                        water: plant['water'],
-                        special: plant['special'],
+          return AnimationLimiter( // 애니메이션을 위한 AnimationLimiter 추가
+            child: GridView.builder(
+              padding: const EdgeInsets.all(10),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, 
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 0.75, 
+              ),
+              itemCount: plants.length,
+              itemBuilder: (context, index) {
+                final plant = plants[index];
+                return AnimationConfiguration.staggeredGrid( // AnimationConfiguration.staggeredGrid로 애니메이션 설정
+                  position: index,
+                  duration: const Duration(milliseconds: 1575),
+                  columnCount: 3, // GridView의 열 수와 동일하게 설정
+                  child: SlideAnimation( // SlideAnimation으로 아이템이 슬라이드되는 애니메이션 
+                    verticalOffset: 50.0,
+                    child: FadeInAnimation( // FadeInAnimation으로 아이템이 페이드되는 애니메이션 
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddPage(
+                                id: plant.id, // 문서 ID를 AddPage로 전달
+                                name: plant['name'],
+                                lux: plant['lux'],
+                                temp: plant['temp'],
+                                humidity: plant['humidity'],
+                                info: plant['info'],
+                                water: plant['water'],
+                                special: plant['special'],
+                              ),
+                            ),
+                          );
+                        },
+                        child: FutureBuilder<String>(
+                          future: _getImageUrl(plant.id), // 문서 ID와 같은 이름의 이미지 URL 가져오기
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            final imageUrl = snapshot.data!;
+                            return Card(
+                              elevation: 5,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Expanded(
+                                    child: imageUrl.isNotEmpty
+                                        ? Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.cover,
+                                    )
+                                        : Image.asset(
+                                      'images/seed.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Container(
+                                    color: Colors.green, 
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      plant['name'],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white, 
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
-                  );
-                },
-                child: FutureBuilder<String>(
-                  future: _getImageUrl(plant.id), // 문서 ID와 같은 이름의 이미지 URL 가져오기
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    final imageUrl = snapshot.data!;
-                    return Card(
-                      elevation: 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            child: imageUrl.isNotEmpty
-                                ? Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.asset(
-                                    'images/seed.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                          Container(
-                            color: Colors.green, // 원하는 배경 색상으로 변경
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              plant['name'],
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white, // 텍스트 색상도 변경 가능
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
