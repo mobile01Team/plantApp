@@ -4,6 +4,8 @@ import 'package:firebase_storage/firebase_storage.dart'; // firebase_storage 패
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart'; // shimmer 패키지 추가
 
+import 'home.dart';
+
 class AddPage extends StatefulWidget {
   final String id;
   final String name;
@@ -333,7 +335,10 @@ class _AddPageState extends State<AddPage> {
                         'date': Timestamp.fromDate(_selectedDate!),
                         'special': widget.special,
                       });
-                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
