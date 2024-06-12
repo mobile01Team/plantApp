@@ -173,7 +173,8 @@ class _DictionaryState extends State<Dictionary> {
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(height: 8), // 수직 간격 추가
+                                          const SizedBox(
+                                              height: 15), // 수직 간격 추가
                                           SizedBox(
                                             width: 250.0,
                                             height: 27,
@@ -199,8 +200,9 @@ class _DictionaryState extends State<Dictionary> {
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 18),
+                                      const SizedBox(height: 23),
                                       Container(
+                                        height: 320, // 고정된 높이 설정
                                         padding: const EdgeInsets.all(16.0),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
@@ -214,85 +216,91 @@ class _DictionaryState extends State<Dictionary> {
                                             ),
                                           ],
                                         ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                    Icons.wb_sunny_outlined,
-                                                    color: Colors.orange),
-                                                const SizedBox(width: 8),
-                                                Expanded(
-                                                  child: Text(
-                                                    plant['lux'],
-                                                    style: const TextStyle(
-                                                        fontSize: 18),
-                                                    overflow: TextOverflow.clip,
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                      Icons.wb_sunny_outlined,
+                                                      color: Colors.orange),
+                                                  const SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      plant['lux'],
+                                                      style: const TextStyle(
+                                                          fontSize: 18),
+                                                      overflow:
+                                                          TextOverflow.clip,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                    Icons.thermostat_outlined,
-                                                    color: Colors.lightGreen),
-                                                const SizedBox(width: 8),
-                                                Expanded(
-                                                  child: Text(
-                                                    plant['temp'],
-                                                    style: const TextStyle(
-                                                        fontSize: 18),
-                                                    overflow: TextOverflow.clip,
+                                                ],
+                                              ),
+                                              const SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                      Icons.thermostat_outlined,
+                                                      color: Colors.lightGreen),
+                                                  const SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      plant['temp'],
+                                                      style: const TextStyle(
+                                                          fontSize: 18),
+                                                      overflow:
+                                                          TextOverflow.clip,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                    Icons.opacity_outlined,
-                                                    color: Color.fromARGB(
-                                                        255, 127, 203, 238)),
-                                                const SizedBox(width: 8),
-                                                Expanded(
-                                                  child: Text(
-                                                    plant['humidity'],
-                                                    style: const TextStyle(
-                                                        fontSize: 18),
-                                                    overflow: TextOverflow.clip,
+                                                ],
+                                              ),
+                                              const SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                      Icons.opacity_outlined,
+                                                      color: Color.fromARGB(
+                                                          255, 127, 203, 238)),
+                                                  const SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      plant['humidity'],
+                                                      style: const TextStyle(
+                                                          fontSize: 18),
+                                                      overflow:
+                                                          TextOverflow.clip,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 16),
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                    Icons.format_color_fill,
-                                                    color: Colors.lightBlue),
-                                                const SizedBox(width: 8),
-                                                Expanded(
-                                                  child: Text(
-                                                    plant['water'],
-                                                    style: const TextStyle(
-                                                        fontSize: 18),
-                                                    overflow: TextOverflow.clip,
+                                                ],
+                                              ),
+                                              const SizedBox(height: 16),
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                      Icons.format_color_fill,
+                                                      color: Colors.lightBlue),
+                                                  const SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      plant['water'],
+                                                      style: const TextStyle(
+                                                          fontSize: 18),
+                                                      overflow:
+                                                          TextOverflow.clip,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 16),
-                                            Text(
-                                              plant['info'],
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                              const SizedBox(height: 16),
+                                              Text(
+                                                plant['info'],
+                                                style: const TextStyle(
+                                                    fontSize: 18),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],
