@@ -163,6 +163,7 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.blue),
+          color: Color(0xffFFF8D5),
         ),
         height: 100,
         child: Weather(), // WeatherWidget을 사용하여 미세먼지 농도 표시
