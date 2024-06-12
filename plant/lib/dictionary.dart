@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -37,258 +38,290 @@ class _DictionaryState extends State<Dictionary> {
         backgroundColor: Colors.green,
         iconTheme: const IconThemeData(color: Color(0xffFFFCF2)),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream:
-            FirebaseFirestore.instance.collection('addPlantList').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      backgroundColor: const Color(0xffFFFCF2),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(1.0),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: selectedType,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+                items: <String>[
+                  'All',
+                  '키우기 쉬움',
+                  '공기정화',
+                  '향이 좋음',
+                  '진정효과',
+                  '가습효과'
+                ].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                          color: value == selectedType
+                              ? Colors.green
+                              : Colors.black,
+                          fontWeight: value == selectedType
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          fontSize: 17),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedType = value!;
+                  });
+                },
+              ),
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('addPlantList')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          final plants = snapshot.data!.docs.where((plant) {
-            if (selectedType == 'All') return true;
-            return plant['special'] == selectedType;
-          }).toList();
+                final plants = snapshot.data!.docs.where((plant) {
+                  if (selectedType == 'All') return true;
+                  return plant['special'] == selectedType;
+                }).toList();
 
-          return Column(
-            children: [
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: plants.length,
-                  itemBuilder: (context, index) {
-                    final plant = plants[index];
-                    return FutureBuilder<String>(
-                      future: _getImageUrl(plant.id),
-                      builder: (context, imageUrlSnapshot) {
-                        if (!imageUrlSnapshot.hasData) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        final imageUrl = imageUrlSnapshot.data!;
-                        return Stack(
-                          children: [
-                            Card(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 40, horizontal: 15),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(16, 30, 16, 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Center(
-                                      child: imageUrl.isNotEmpty
-                                          ? Image.network(
-                                              imageUrl,
-                                              width: 200,
-                                              height: 200,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Image.asset(
-                                              'images/seed.png',
-                                              width: 200,
-                                              height: 200,
-                                              fit: BoxFit.cover,
-                                            ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Row(
-                                      children: [
-                                        Shimmer.fromColors(
-                                          baseColor: const Color.fromARGB(
-                                              255, 7, 69, 69),
-                                          highlightColor: const Color.fromARGB(
-                                              255, 140, 188, 96),
-                                          child: Text(
-                                            plant['name'],
-                                            style:
-                                                const TextStyle(fontSize: 24),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Container(
-                                          padding: const EdgeInsets.all(8.0),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            border: Border.all(
-                                                color: Colors.lightGreen,
-                                                width: 2),
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                color: Colors.black12,
-                                                blurRadius: 6,
-                                                offset: Offset(0, 2),
+                return Column(
+                  children: [
+                    Expanded(
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: plants.length,
+                        itemBuilder: (context, index) {
+                          final plant = plants[index];
+                          return FutureBuilder<String>(
+                            future: _getImageUrl(plant.id),
+                            builder: (context, imageUrlSnapshot) {
+                              if (!imageUrlSnapshot.hasData) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+                              final imageUrl = imageUrlSnapshot.data!;
+                              return Card(
+                                color: Color(0xffFFD5D5),
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 15),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 20, 16, 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Center(
+                                        child: imageUrl.isNotEmpty
+                                            ? Image.network(
+                                                imageUrl,
+                                                width: 200,
+                                                height: 200,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.asset(
+                                                'images/seed.png',
+                                                width: 200,
+                                                height: 200,
+                                                fit: BoxFit.cover,
                                               ),
-                                            ],
-                                          ),
-                                          child: Shimmer.fromColors(
-                                            baseColor: Colors.lightBlue,
-                                            highlightColor:
-                                                const Color.fromARGB(
-                                                    255, 169, 176, 159),
-                                            child: Text(
-                                              plant['special'],
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Container(
-                                      padding: const EdgeInsets.all(16.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(16),
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Colors.black12,
-                                            blurRadius: 6,
-                                            offset: Offset(0, 2),
-                                          ),
-                                        ],
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      const SizedBox(height: 16),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start, // 수직 정렬을 왼쪽 정렬로 설정
                                         children: [
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                  Icons.wb_sunny_outlined,
-                                                  color: Colors.orange),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Text(
-                                                  plant['lux'],
-                                                  style: const TextStyle(
-                                                      fontSize: 18),
-                                                  overflow: TextOverflow.clip,
+                                          Container(
+                                            padding: const EdgeInsets.all(5.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                  color: Colors.lightGreen,
+                                                  width: 2),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.black12,
+                                                  blurRadius: 6,
+                                                  offset: Offset(0, 2),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.lightBlue,
+                                              highlightColor:
+                                                  const Color.fromARGB(
+                                                      255, 169, 176, 159),
+                                              child: Text(
+                                                plant['special'],
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                          const SizedBox(height: 16),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                  Icons.thermostat_outlined,
-                                                  color: Colors.lightGreen),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Text(
-                                                  plant['temp'],
-                                                  style: const TextStyle(
-                                                      fontSize: 18),
-                                                  overflow: TextOverflow.clip,
-                                                ),
+                                          const SizedBox(height: 8), // 수직 간격 추가
+                                          SizedBox(
+                                            width: 250.0,
+                                            height: 27,
+                                            child: DefaultTextStyle(
+                                              style: const TextStyle(
+                                                  fontSize: 24.0,
+                                                  fontWeight: FontWeight.bold),
+                                              child: AnimatedTextKit(
+                                                animatedTexts: [
+                                                  TypewriterAnimatedText(
+                                                    plant['name'],
+                                                    speed: const Duration(
+                                                        milliseconds: 200),
+                                                  ),
+                                                ],
+                                                onTap: () {
+                                                  print("Tap Event");
+                                                },
+                                                isRepeatingAnimation:
+                                                    true, // 애니메이션 반복 여부 설정
                                               ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 16),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.opacity_outlined,
-                                                  color: Color.fromARGB(
-                                                      255, 127, 203, 238)),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Text(
-                                                  plant['humidity'],
-                                                  style: const TextStyle(
-                                                      fontSize: 18),
-                                                  overflow: TextOverflow.clip,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 16),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                  Icons.format_color_fill,
-                                                  color: Colors.lightBlue),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Text(
-                                                  plant['water'],
-                                                  style: const TextStyle(
-                                                      fontSize: 18),
-                                                  overflow: TextOverflow.clip,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 16),
-                                          Text(
-                                            plant['info'],
-                                            style:
-                                                const TextStyle(fontSize: 18),
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 10,
-                              right: 10,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: selectedType,
-                                  items: <String>[
-                                    'All',
-                                    '키우기 쉬움',
-                                    '공기정화',
-                                    '향이 좋음',
-                                    '진정효과',
-                                    '가습효과'
-                                  ].map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
+                                      const SizedBox(height: 18),
+                                      Container(
+                                        padding: const EdgeInsets.all(16.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Colors.black12,
+                                              blurRadius: 6,
+                                              offset: Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                    Icons.wb_sunny_outlined,
+                                                    color: Colors.orange),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    plant['lux'],
+                                                    style: const TextStyle(
+                                                        fontSize: 18),
+                                                    overflow: TextOverflow.clip,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 16),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                    Icons.thermostat_outlined,
+                                                    color: Colors.lightGreen),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    plant['temp'],
+                                                    style: const TextStyle(
+                                                        fontSize: 18),
+                                                    overflow: TextOverflow.clip,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 16),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                    Icons.opacity_outlined,
+                                                    color: Color.fromARGB(
+                                                        255, 127, 203, 238)),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    plant['humidity'],
+                                                    style: const TextStyle(
+                                                        fontSize: 18),
+                                                    overflow: TextOverflow.clip,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 16),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                    Icons.format_color_fill,
+                                                    color: Colors.lightBlue),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    plant['water'],
+                                                    style: const TextStyle(
+                                                        fontSize: 18),
+                                                    overflow: TextOverflow.clip,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 16),
+                                            Text(
+                                              plant['info'],
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedType = value!;
-                                    });
-                                  },
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              SmoothPageIndicator(
-                controller: _pageController,
-                count: plants.length,
-                effect: ScrollingDotsEffect(
-                  dotWidth: 8.0,
-                  dotHeight: 8.0,
-                  activeDotColor: Colors.green,
-                  dotColor: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 16.0),
-            ],
-          );
-        },
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 13.0),
+                    SmoothPageIndicator(
+                      controller: _pageController,
+                      count: plants.length,
+                      effect: ScrollingDotsEffect(
+                        dotWidth: 8.0,
+                        dotHeight: 8.0,
+                        activeDotColor: Colors.green,
+                        dotColor: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 40.0),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
