@@ -1,7 +1,8 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colored_text/colored_text.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart'; // shimmer 패키지 추가
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -112,7 +113,14 @@ class _DictionaryState extends State<Dictionary> {
                               }
                               final imageUrl = imageUrlSnapshot.data!;
                               return Card(
-                                color: Color(0xffFFD5D5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  side: BorderSide(
+                                    color: Colors.green,
+                                    width: 1.0,
+                                  ),
+                                ),
+                                color: Colors.white,
                                 margin: const EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 15),
                                 child: Padding(
@@ -176,28 +184,18 @@ class _DictionaryState extends State<Dictionary> {
                                           const SizedBox(
                                               height: 15), // 수직 간격 추가
                                           SizedBox(
-                                            width: 250.0,
-                                            height: 27,
-                                            child: DefaultTextStyle(
-                                              style: const TextStyle(
-                                                  fontSize: 24.0,
-                                                  fontWeight: FontWeight.bold),
-                                              child: AnimatedTextKit(
-                                                animatedTexts: [
-                                                  TypewriterAnimatedText(
-                                                    plant['name'],
-                                                    speed: const Duration(
-                                                        milliseconds: 200),
-                                                  ),
-                                                ],
-                                                onTap: () {
-                                                  print("Tap Event");
-                                                },
-                                                isRepeatingAnimation:
-                                                    true, // 애니메이션 반복 여부 설정
-                                              ),
-                                            ),
-                                          ),
+                                              width: 250.0,
+                                              height: 27,
+                                              child: ColoredText(
+                                                plant['name'],
+                                                color: Colors.green,
+                                                textStyle:
+                                                    GoogleFonts.dancingScript(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 24,
+                                                  color: Colors.black,
+                                                ),
+                                              )),
                                         ],
                                       ),
                                       const SizedBox(height: 23),
@@ -205,7 +203,7 @@ class _DictionaryState extends State<Dictionary> {
                                         height: 320, // 고정된 높이 설정
                                         padding: const EdgeInsets.all(16.0),
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: Color(0xffFFFCF2),
                                           borderRadius:
                                               BorderRadius.circular(16),
                                           boxShadow: const [
