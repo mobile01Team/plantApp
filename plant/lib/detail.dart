@@ -137,9 +137,9 @@ class _DetailPageState extends State<DetailPage>
 
     String lottieFile;
 
-    if (difference >= 20) {
+    if (difference >= 40) {
       lottieFile = 'images/plant3.json';
-    } else if (difference >= 10) {
+    } else if (difference >= 20) {
       lottieFile = 'images/plant2.json';
     } else {
       lottieFile = 'images/plant1.json';
