@@ -190,7 +190,7 @@ class _DictionaryState extends State<Dictionary> {
                                                 plant['name'],
                                                 color: Colors.green,
                                                 textStyle:
-                                                    GoogleFonts.dancingScript(
+                                                    GoogleFonts.nanumMyeongjo(
                                                   fontWeight: FontWeight.w300,
                                                   fontSize: 24,
                                                   color: Colors.black,
